@@ -1,49 +1,71 @@
-import React from 'react'
+
+import React, {useEffect, useState} from 'react'
 import BookCard from './BookCard'
 import Header from './Header'
+import axios from 'axios';
+import Footer from './Footer';
+
+
+axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
 function Books() {
+
+    const [books, setBooks] = useState()
+
+    useEffect(async () => {
+        
+        let response = await axios.get('/api/v1/Books')
+        if(response){
+            setBooks(response.data)
+            console.log(books)
+        }else{
+            console.log("error")
+        }
+
+        // .then(response => {
+
+        //     setBooks(response?.data)
+        //     console.log(books)
+        // })
+
+        // .catch(e => {
+        //     console.log(e)
+        // })
+
+    }, [])
+
+   
+
     return (
         <>
-        <Header/>
+        <Header
+            headerTitle="My Library"
+        />
         <div className="container">
+            <input type="text" className="w-25 mb-4 form-control" placeholder="Book name"/>
             <div className="row">
+                {/* {
+                    books ?
+                    books.map((book) => {
+                        <BookCard
+                            id={book.id}
+                            description={book.description}
+                            excerpt={book.excerpt}
+                            pageCount={book.pageCount}
+                            publishDate={book.publishDate}
+                            title={book.title}
+                        />
+                    })
+                    : null
+                } */}
                 <BookCard/>
-                <div className="col-3">
-                    <div className="card w-100">
-                        <img className="card-img-left" src="Landscape.jpg" alt="Card image cap"/>
-                        <div className="card-body">
-                            <h5 className="card-title">Title</h5>
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <p className="text-muted">16 pages</p>
-                            <a href="#" class="card-link">See more...</a>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-3">
-                    <div className="card w-100">
-                        <img className="card-img-left" src="Landscape.jpg" alt="Card image cap"/>
-                        <div className="card-body">
-                            <h5 className="card-title">Title</h5>
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <p className="text-muted">16 pages</p>
-                            <a href="#" class="card-link">See more...</a>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-3">
-                    <div className="card w-100">
-                        <img className="card-img-left" src="Landscape.jpg" alt="Card image cap"/>
-                        <div className="card-body">
-                            <h5 className="card-title">Title</h5>
-                            <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <p className="text-muted">16 pages</p>
-                            <a href="#" class="card-link">See more...</a>
-                        </div>
-                    </div>
-                </div>
+                <BookCard/>
+                <BookCard/>
+                <BookCard/>
+                <BookCard/>
             </div>
         </div>
+        <Footer/>
         </>
     )
 }

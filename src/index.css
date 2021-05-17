@@ -5,3 +5,13 @@ body {
 .image {
   height: 500px;
 }
+
+.footer {
+  height: 60px;
+  margin-bottom: 0px;
+}
+
+.my-table {
+  background-color: white;
+}
+
