@@ -1,4 +1,5 @@
 import React from 'react'
+import TextField from '@material-ui/core/TextField';
 
 function AddProductForm() {
     return (
@@ -7,51 +8,50 @@ function AddProductForm() {
 
                 <div className="row">
                     <div className="col-lg-6 col-sm-12 form-group mb-4">
-                        <label for="inputName" className="mb-2">Name</label>
-                        <input
+                        <TextField
+                            label="Name"
                             type="text"
-                            className="form-control"
-                            id="inputName"
-                            aria-describedby="emailHelp" 
-                            placeholder="Book name"
+                            fullWidth
                         />
                     </div>
                     <div className="col-lg-6 col-sm-12 form-group mb-4">
-                        <label for="inputDescription" className="mb-2">Description</label>
-                        <input
-                            type="text" 
-                            className="form-control"
-                            id="inputDescription"
-                            placeholder="Book description"
+                        
+                        <TextField
+                            label="Description"
+                            type="text"
+                            fullWidth
                         />
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-lg-6 col-sm-12 form-group mb-4">
-                        <label for="inputDescription" className="mb-2">Publication date</label>
-                        <input
+                     
+                        <TextField
+                            label="Publication date"
                             type="text"
-                            className="form-control"
-                            id="inputDescription"
-                            placeholder="Book publication date"
+                            fullWidth
                         />
                     </div>
                     <div className="col-lg-6 col-sm-12 form-group mb-4">
-                        <label for="inputDescription" className="mb-2">Pages</label>
-                        <input
+                  
+                        <TextField
+                            label="Number of pages"
                             type="number"
-                            className="form-control"
-                            id="inputDescription"
-                            placeholder="Number of pages"
-                            min="1"
+                            fullWidth
+                            InputProps={{ inputProps: { min: 1, max: 999999 } }}
                         />
                     </div>
                 </div>
             
                 <div className="form-group mb-4">
-                    <label for="inputDescription" className="mb-2">Excerpt</label>
-                    <textarea type="text" rows="4" className="form-control" id="inputDescription" placeholder="A small excerpt from the book"/>
+                    <TextField
+                        type="text"
+                        fullWidth
+                        label="A small excerpt from the book"
+                        multiline
+                        rows={4}
+                    />
                 </div>
 
                 <div className="d-flex justify-content-end">
