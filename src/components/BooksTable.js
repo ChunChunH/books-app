@@ -9,7 +9,7 @@ function BooksTable() {
         <div className="container mt-5">
             <table className="table table-bordered my-table">
                 <thead>
-                    <tr>
+                    <tr >
                         <th scope="col">ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Publication Date</th>
