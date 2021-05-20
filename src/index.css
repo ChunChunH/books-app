@@ -50,9 +50,22 @@ body {
 }
 
 .loader-container {
-  min-height: 750px;
+  min-height: 850px;
 }
 
 .loader-container-admin {
-  min-height: 400px;
+  min-height: 500px;
+}
+
+@media (max-width: 540px) {
+  .paginationBttns {
+    margin: 0px;
+    padding-left: 0px;
+  }
+
+  .paginationBttns a {
+    font-size: 13px;
+    margin: 0px;
+    
+  }
 }

@@ -33,7 +33,16 @@ function AddBookForm() {
                         </div>
 
                         <div className="row">
-                            <div className="col-lg-6 col-sm-12 form-group mb-4">
+                            <div className="col-lg-4 col-sm-12 form-group mb-4 mt-3">
+
+                                <TextField
+                                    label="ID"
+                                    type="number"
+                                    fullWidth
+                                    InputProps={{ inputProps: { min: 1, max: 999999 } }}
+                                />
+                            </div>
+                            <div className="col-lg-4 col-sm-12 form-group mb-4">
 
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
@@ -51,7 +60,7 @@ function AddBookForm() {
                                 </MuiPickersUtilsProvider>
                             
                             </div>
-                            <div className="col-lg-6 col-sm-12 form-group mb-4 mt-3">
+                            <div className="col-lg-4 col-sm-12 form-group mb-4 mt-3">
                         
                                 <TextField
                                     label="Number of pages"
@@ -60,6 +69,7 @@ function AddBookForm() {
                                     InputProps={{ inputProps: { min: 1, max: 999999 } }}
                                 />
                             </div>
+                            
                         </div>
 
                         <div className="form-group mb-4">
