@@ -15,8 +15,44 @@ body {
   background-color: white;
 }
 
-.description-card {
+.description {
+  display: -webkit-box;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.paginationBttns {
+  height: 40px;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+
+}
+
+.paginationBttns a {
+  padding: 10px;
+  margin: 8px;
+  border-radius: 5px;
+  border: 1px solid #0d6efd;
+  color: #0d6efd !important;
+  cursor: pointer;
+}
+
+.paginationBttns a:hover {
+  color: white !important;
+  background-color: #0d6efd;
+}
+
+.paginationActive a{
+  color: white !important;
+  background-color: #0d6efd;
+}
+
+.loader-container {
+  min-height: 750px;
+}
+
+.loader-container-admin {
+  min-height: 400px;
 }
