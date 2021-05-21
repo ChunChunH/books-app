@@ -34,8 +34,6 @@ function Books() {
         setPageNumber(selected)
     }
 
-   
-
     return (
         <>
         <Header

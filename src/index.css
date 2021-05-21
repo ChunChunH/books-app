@@ -50,7 +50,7 @@ body {
 }
 
 .loader-container {
-  min-height: 850px;
+  min-height: 860px;
 }
 
 .loader-container-admin {
@@ -69,3 +69,4 @@ body {
     
   }
 }
+

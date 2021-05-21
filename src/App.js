@@ -11,6 +11,7 @@ axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 function App() {
   
   const [books, setBooks] = useState()
+  
   useEffect(() => {
     async function fetchData() {
         let response = await axios.get('/api/v1/Books')
@@ -29,7 +30,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Books} />
-          <Route exact path="/book/:bookId" component={BookScreen}/>
+          <Route path="/book/:bookId" component={BookScreen}/>
           <Route exact path="/admin" component={Administration}/>
         </Switch>
       </Router>

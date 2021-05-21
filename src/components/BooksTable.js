@@ -9,12 +9,27 @@ import TextField from '@material-ui/core/TextField';
 import ClearIcon from "@material-ui/icons/Clear";
 import 'date-fns';
 import {format} from "date-fns"
+import axios from 'axios';
+import swal from 'sweetalert'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+  } from '@material-ui/pickers';
+
+axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
 function BooksTable({books}) {
 
     const [pageNumber, setPageNumber] = useState(0)
     const [filter, setFilter] = useState()
     const [shrink, setShrink] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [bookToEdit, setBookToEdit] = useState()
 
     const booksPerPage = 16
     const pagesVisited = pageNumber * booksPerPage 
@@ -31,6 +46,75 @@ function BooksTable({books}) {
 
     const onChangeFilter = e => {
         setFilter(e.target.value)
+    }
+
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+        setBookToEdit()
+      };
+
+    const deleteBook = (id) => {
+        async function fetchData() {
+            let response = await axios.delete(`/api/v1/Books/${id}`)
+            if(response){
+                if(response.status === 200){
+                    swal("Removed", `The book with the ID "${id}" was successfully removed!`, "success")
+                }else {
+                    swal("Error", "The book could not be erased", "error")
+                }
+    
+            }else{
+                console.log("error")
+            }
+        }
+        fetchData()
+    }
+
+    const editBook = (id, title, description, date, page, excerpt) => {
+        handleClickOpen();
+        setBookToEdit({
+            id: id,
+            title,
+            description,
+            date,
+            page,
+            excerpt
+        })        
+    }
+
+    const onChangeInputEdit = (e) => {
+        setBookToEdit({
+            ...bookToEdit,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const onChangeDate = (e) => {
+        setBookToEdit({
+            ...bookToEdit,
+            date: new Date(e) 
+        })
+    }
+
+    const onClickChange = () => {
+        async function fetchData() {
+            let response = await axios.put(`/api/v1/Books/${bookToEdit && bookToEdit.id}`, {
+                "id": bookToEdit.id,
+                "title": bookToEdit.title,
+                "description": bookToEdit.description,
+                "pageCount": bookToEdit.page,
+                "excerpt": bookToEdit.excerpt,
+                "publishDate": bookToEdit.date
+            })
+            return console.log(response)
+        }
+        fetchData()
+        handleClose()
+        swal("Edited", "Book edited successfully!", "success")
     }
 
     return (
@@ -88,8 +172,8 @@ function BooksTable({books}) {
                                                 <td>{book.pageCount} pages</td>
                                                 <td>
                                                     <div>
-                                                        <IconButton> <EditIcon/> </IconButton>
-                                                        <IconButton> <DeleteIcon/> </IconButton>
+                                                        <IconButton onClick={() => editBook(book.id, book.title, book.description, book.publishDate, book.pageCount, book.excerpt)}> <EditIcon/> </IconButton>
+                                                        <IconButton onClick={() => deleteBook(book.id)}> <DeleteIcon/> </IconButton>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -122,6 +206,113 @@ function BooksTable({books}) {
                     </div>
                 }
                 
+
+                <div>
+                    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                        <div className="row"> 
+                            <div className="col-6">
+                                <DialogTitle id="form-dialog-title">Edit Book</DialogTitle>
+                            </div>
+                            <div className="col-6 d-flex justify-content-end">
+                                <IconButton
+                                    onClick={handleClose}
+                                >
+                                    <ClearIcon />
+                                </IconButton>
+                            </div>
+
+                        </div>
+
+                        
+                        <DialogContent>
+        
+                            <TextField
+                                label="Name"
+                                type="text"
+                                fullWidth
+                                className="mb-4"
+                                value={bookToEdit && bookToEdit.title}
+                                name="title"
+                                onChange={onChangeInputEdit}
+                            />
+                          
+                            <TextField
+                                label="Description"
+                                type="text"
+                                fullWidth
+                                className="mb-4"
+                                value={bookToEdit && bookToEdit.description}
+                                name="description"
+                                onChange={onChangeInputEdit}
+                                multiline
+                                rows={4}
+                            />
+            
+                            <TextField
+                                label="ID"
+                                type="number"
+                                fullWidth
+                                InputProps={{ inputProps: { min: 0, max: 999999 } }}
+                                className="mb-4"
+                                value={bookToEdit && bookToEdit.id}
+                                name="id"
+                                onChange={onChangeInputEdit}
+                            />
+
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                                <KeyboardDatePicker
+                                    margin="normal"
+                                    id="date-picker-dialog"
+                                    label="Publication date"
+                                    format="dd/MM/yyyy"
+                                    value={bookToEdit && bookToEdit.date}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                    fullWidth
+                                    className="mb-4"
+                                    onChange={onChangeDate}
+                                    name="date"
+                                />
+
+                            </MuiPickersUtilsProvider>
+
+                            <TextField
+                                label="Number of Pages"
+                                type="number"
+                                fullWidth
+                                InputProps={{ inputProps: { min: 1, max: 999999 } }}
+                                className="mb-4"
+                                value={bookToEdit && bookToEdit.page}
+                                name="page"
+                                onChange={onChangeInputEdit}
+                            />
+
+                            <TextField
+                                type="text"
+                                fullWidth
+                                label="Excerpt"
+                                multiline
+                                rows={4}
+                                className="mb-4"
+                                value={bookToEdit && bookToEdit.excerpt}
+                                name="excerpt"
+                                onChange={onChangeInputEdit}
+                            />
+
+                        </DialogContent>
+                        <DialogActions>
+                            <button onClick={handleClose} className="btn btn-secondary">
+                                Cancel
+                            </button>
+                            <button onClick={() => onClickChange()} className="btn btn-primary">
+                                Change
+                            </button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+
                 </div>
             </div>
         </div>
