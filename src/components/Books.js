@@ -34,6 +34,8 @@ function Books() {
         setPageNumber(selected)
     }
 
+   
+
     return (
         <>
         <Header
@@ -73,6 +75,11 @@ function Books() {
                         ?
                         displayBooks.map((book) => {
 
+                            const paramsLink = {
+                                pathname: `/book/${book.id}`,
+                                id: book.id,
+                            }
+
                             return (
                                 
                                 <div className="col-lg-3 col-md-4 col-sm-12 mb-5">
@@ -82,7 +89,7 @@ function Books() {
                                             <h5 className="card-title">{book.title}</h5>
                                             <p className="card-text description">{book.description}</p>
                                             <p className="text-muted">{book.pageCount} pages</p>
-                                            <Link to="/book"><button className="btn btn-primary mb-2">See more</button></Link>
+                                            <Link to={paramsLink}><button className="btn btn-primary mb-2">See more</button></Link>
                                         </div>
                                     </div> 
                                 </div>

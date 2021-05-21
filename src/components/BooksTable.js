@@ -7,6 +7,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ReactPaginate from "react-paginate";
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from "@material-ui/icons/Clear";
+import 'date-fns';
+import {format} from "date-fns"
 
 function BooksTable({books}) {
 
@@ -75,11 +77,14 @@ function BooksTable({books}) {
                             <tbody>
                                 {
                                     displayBooks.map(book => {
+
+                                        const date = new Date(book.publishDate)
+
                                         return (
                                             <tr>
                                                 <th scope="row">{book.id}</th>
                                                 <td>{book.title}</td>
-                                                <td>23/4/18</td>
+                                                <td>{format(date,'dd/MM/yyyy' )}</td>
                                                 <td>{book.pageCount} pages</td>
                                                 <td>
                                                     <div>

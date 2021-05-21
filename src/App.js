@@ -8,7 +8,6 @@ import axios from 'axios';
 
 axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
-
 function App() {
   
   const [books, setBooks] = useState()
@@ -30,7 +29,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" component={Books} />
-          <Route exact path="/book" component={BookScreen}/>
+          <Route exact path="/book/:bookId" component={BookScreen}/>
           <Route exact path="/admin" component={Administration}/>
         </Switch>
       </Router>
