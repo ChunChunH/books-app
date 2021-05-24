@@ -230,7 +230,7 @@ function BooksTable({books}) {
                                 label="Name"
                                 type="text"
                                 fullWidth
-                                className="mb-4"
+                                className="mb-5"
                                 value={bookToEdit && bookToEdit.title}
                                 name="title"
                                 onChange={onChangeInputEdit}
@@ -240,7 +240,7 @@ function BooksTable({books}) {
                                 label="Description"
                                 type="text"
                                 fullWidth
-                                className="mb-4"
+                                className="mb-5"
                                 value={bookToEdit && bookToEdit.description}
                                 name="description"
                                 onChange={onChangeInputEdit}
@@ -248,16 +248,6 @@ function BooksTable({books}) {
                                 rows={4}
                             />
             
-                            <TextField
-                                label="ID"
-                                type="number"
-                                fullWidth
-                                InputProps={{ inputProps: { min: 0, max: 999999 } }}
-                                className="mb-4"
-                                value={bookToEdit && bookToEdit.id}
-                                name="id"
-                                onChange={onChangeInputEdit}
-                            />
 
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
@@ -271,7 +261,7 @@ function BooksTable({books}) {
                                         'aria-label': 'change date',
                                     }}
                                     fullWidth
-                                    className="mb-4"
+                                    className="mb-5"
                                     onChange={onChangeDate}
                                     name="date"
                                 />
@@ -283,7 +273,7 @@ function BooksTable({books}) {
                                 type="number"
                                 fullWidth
                                 InputProps={{ inputProps: { min: 1, max: 999999 } }}
-                                className="mb-4"
+                                className="mb-5"
                                 value={bookToEdit && bookToEdit.page}
                                 name="page"
                                 onChange={onChangeInputEdit}
@@ -295,7 +285,7 @@ function BooksTable({books}) {
                                 label="Excerpt"
                                 multiline
                                 rows={4}
-                                className="mb-4"
+                                className="mb-5"
                                 value={bookToEdit && bookToEdit.excerpt}
                                 name="excerpt"
                                 onChange={onChangeInputEdit}

@@ -1,13 +1,13 @@
-import React, { useContext } from 'react'
-import { myContext } from '../context'
+import React from 'react'
 import AddBookForm from './AddBookForm'
 import BooksTable from './BooksTable'
 import Footer from './Footer'
 import Header from './Header'
+import { useBooks } from '../context/MyContext';
 
 function Administration() {
 
-    const {books} = useContext(myContext)
+    const {books} = useBooks()
 
     return (
         <>

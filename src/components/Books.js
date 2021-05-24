@@ -1,18 +1,19 @@
-import React, {useContext, useState} from 'react'
+import React, {useState} from 'react'
 import Header from './Header'
 import Footer from './Footer';
 import ReactPaginate from "react-paginate";
 import '../index.css'
 import {Link} from "react-router-dom"
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { myContext } from '../context';
+import { useBooks } from '../context/MyContext';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from "@material-ui/icons/Clear";
 import { IconButton } from "@material-ui/core";
 
+
 function Books() {
 
-    const {books} = useContext(myContext)
+    const {books} = useBooks()
     const [pageNumber, setPageNumber] = useState(0)
     const [filter, setFilter] = useState()
     const [shrink, setShrink] = useState(false)

@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@material-ui/core/TextField';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -9,22 +9,25 @@ import {
 import axios from 'axios';
 import swal from 'sweetalert'
 import Alert from '@material-ui/lab/Alert';
+import { useForm, Controller } from "react-hook-form";
 
 axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
+
 function AddBookForm() {
+
+    const { register, handleSubmit, control} = useForm();
 
     const [newBook, setNewBook] = useState({
         name: "",
         description: "",
-        id: null,
         date: null,
         page: null,
         excerpt: "",
     })
     const [error, setError] = useState(false)
 
-    const {name, description, id, date, page, excerpt} = newBook
+    const {name, description, date, page, excerpt} = newBook
 
     const handleInputChange = e => {
         setNewBook({
@@ -40,26 +43,31 @@ function AddBookForm() {
         })
     }
 
-    const onSubmit = e => {
-        e.preventDefault()
+    const getRandomId = () => {
+        return parseInt(Math.random() * (99999 - 1) + 1);
+    }
 
-        if(name.trim() === "" || description.trim() === "" || id === null || date === null || page === null || excerpt.trim() === ""){
+    const onSubmitForm = data => {
+
+        console.log("onSubmit funciona")
+
+        if(name.trim() === "" || description.trim() === "" || date === null || page === null || excerpt.trim() === ""){
             setError(true)
         }else{
             async function fetchData() {
                 let response = await axios.post("/api/v1/Books", {
-                    "id": id,
+                    "id": getRandomId(),
                     "title": name,
                     "description": description,
                     "pageCount": page,
-                    "excerpt":excerpt,
+                    "excerpt": excerpt,
                     "publishDate": date
                 })
-                return console.log(response)
+                console.log(response)
             }
             fetchData()
             setError(false)
-            swal("Added", `The book with the ID "${id}" was successfully added!`, "success")
+            swal("Added", `The book "${name}" was successfully added!`, "success")
         }
 
     } 
@@ -68,10 +76,30 @@ function AddBookForm() {
         <div className="container bg-white">
             <div className="row">
                 <div className="col-12">
-                    <form className="w-100 p-4">
+                    <form className="w-100 p-4 " onSubmit={handleSubmit(onSubmitForm)}>
                         <div className="row">
                             <div className="col-lg-6 col-sm-12 form-group mb-4">
-                                <TextField
+                                <Controller
+                                    name="name"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{ required: 'Book name is required' }}
+                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                        <TextField
+                                            label="Name"
+                                            type="text"
+                                            fullWidth
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            autoComplete= "off"
+                                            helperText={error ? error.message : null}
+                                        />
+                                    )}
+                                />
+
+                                {/* <TextField
+                                    id='name'
                                     label="Name"
                                     type="text"
                                     fullWidth
@@ -79,10 +107,30 @@ function AddBookForm() {
                                     name="name"
                                     autoComplete= "off"
                                     onChange={handleInputChange}
-                                />
+                
+                                /> */}
+
                             </div>
                             <div className="col-lg-6 col-sm-12 form-group mb-4">
-                                
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{ required: 'Book description is required' }}
+                                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                        <TextField
+                                            label="Description"
+                                            type="text"
+                                            fullWidth
+                                            value={value}
+                                            onChange={onChange}
+                                            error={!!error}
+                                            helperText={error ? error.message : null}
+                                            autoComplete= "off"
+                                        />
+                                    )}
+                                />
+
                                 <TextField
                                     label="Description"
                                     type="text"
@@ -97,21 +145,7 @@ function AddBookForm() {
                         </div>
 
                         <div className="row">
-                            <div className="col-lg-4 col-sm-12 form-group mb-4 mt-3">
-
-                                <TextField
-                                    label="ID"
-                                    type="number"
-                                    fullWidth
-                                    InputProps={{ inputProps: { min: 0, max: 999999 } }}
-                                    value={id}
-                                    name="id"
-                                    autoComplete= "off"
-                                    onChange={handleInputChange}
-
-                                />
-                            </div>
-                            <div className="col-lg-4 col-sm-12 form-group mb-4">
+                            <div className="col-lg-6 col-sm-12 form-group mb-4">
 
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
 
@@ -128,14 +162,14 @@ function AddBookForm() {
                                         name="date"
                                         onChange={handleInputDateChange}
                                         autoComplete= "off"
-
+                                        type="text"
 
                                     />
 
                                 </MuiPickersUtilsProvider>
                             
                             </div>
-                            <div className="col-lg-4 col-sm-12 form-group mb-4 mt-3">
+                            <div className="col-lg-6 col-sm-12 form-group mb-4 mt-3">
                         
                                 <TextField
                                     label="Number of pages"
@@ -167,14 +201,13 @@ function AddBookForm() {
                         </div>
 
                         <div className="d-flex justify-content-end">
-                            <button type="submit" className="btn btn-primary" onClick={(e) => onSubmit(e)}>Add</button>
+                            <button type="submit" className="btn btn-primary">Add</button>
                         </div>
 
                         {
                             error
                             ? <Alert severity="error" className="w-100 mt-4">The form must be completed correctly!</Alert>
                             : null
-
                         }
 
                     </form>
