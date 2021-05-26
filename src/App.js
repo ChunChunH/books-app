@@ -1,6 +1,6 @@
 import React from 'react'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
-import Administration from './components/Administration';
+import Administration from './components/admin/Administration';
 import Books from './components/Books';
 import BookScreen from './components/BookScreen';
 import { BooksProvider } from './context/MyContext';
