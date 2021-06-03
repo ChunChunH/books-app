@@ -10,6 +10,7 @@ import axios from 'axios';
 import swal from 'sweetalert'
 import { useForm, Controller } from "react-hook-form";
 import { useBooks } from '../../context/MyContext';
+import "../../index.css"
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
@@ -211,7 +212,7 @@ function AddBookForm() {
                         </div>
 
                         <div className="d-flex justify-content-end">
-                            <button type="submit" className="btn btn-primary">Add</button>
+                            <button type="submit" className="btn btn-blue text-light">Add</button>
                         </div>
                     </form>
                 </div>

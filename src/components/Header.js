@@ -1,10 +1,13 @@
 import React from 'react'
+import "../index.css"
+import MenuBookIcon from '@material-ui/icons/MenuBook'
 
-function Header({headerTitle}) {
+function Header() {
     return (
-        <div className="w-100 bg-primary mb-5 d-flex align-items-center justify-content-center py-2">
-            <h2 className="text-white">{headerTitle}</h2>
+        <div className="header mb-5 d-flex align-items-center justify-content-start ps-5">
+            <div className="d-flex align-items-center "><MenuBookIcon style={{ color: 'white', fontSize: 40 }}/> <h2 className="text-white ms-2">My Library</h2></div>
         </div>
+
     )
 }
 

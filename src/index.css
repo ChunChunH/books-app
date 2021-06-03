@@ -4,6 +4,7 @@ body {
 
 .footer {
   height: 60px;
+  background-color: #3f51b5;
 }
 
 .my-table {
@@ -30,19 +31,19 @@ body {
   padding: 10px;
   margin: 8px;
   border-radius: 5px;
-  border: 1px solid #0d6efd;
-  color: #0d6efd !important;
+  border: 1px solid #3f51b5;
+  color: #3f51b5 !important;
   cursor: pointer;
 }
 
 .paginationBttns a:hover {
   color: white !important;
-  background-color: #0d6efd;
+  background-color: #3f51b5;
 }
 
 .paginationActive a{
   color: white !important;
-  background-color: #0d6efd;
+  background-color: #3f51b5;
 }
 
 .loader-container {
@@ -71,6 +72,10 @@ body {
 .image-container {
   max-height: 390px;
   overflow: hidden;
+}
+
+.image {
+  min-height: 390px;
 }
 
 @media (max-width: 1399px) {
@@ -106,3 +111,23 @@ body {
   min-height: 30vh;
 }
 
+.header {
+  height: 100px;
+  background-color: #3f51b5;
+}
+
+@media (max-width: 414px) {
+  .header {
+    display: flex;
+    justify-content: center !important;
+    padding: 0px !important;
+  }
+}
+
+.btn-blue {
+  background-color: #3f51b5;
+}
+
+.swal-button {
+  background-color: #4962B3;
+}

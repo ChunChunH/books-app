@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from "@material-ui/icons/Clear";
 import { useBooks } from '../../context/MyContext';
+import "../../index.css"
 
 axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
@@ -237,7 +238,7 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                     <button onClick={handleClose} className="btn btn-secondary">
                         Cancel
                     </button>
-                    <button onClick={onClickChange} type="submit" className="btn btn-primary">
+                    <button onClick={onClickChange} type="submit" className="btn btn-blue text-light">
                         Change
                     </button>
                 </DialogActions>

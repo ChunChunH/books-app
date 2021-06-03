@@ -41,7 +41,7 @@ function BookScreen(props) {
             book ?
 
             <div className="container">
-                <Link to="/"><button className="btn btn-primary"><ArrowBackIcon/> Back to books</button></Link>
+                <Link to="/"><button className="btn btn-blue text-light"><ArrowBackIcon/> Back to books</button></Link>
                 <div className="row mt-4">
                     <div className="col-lg-3 col-md-4 col-sm-12">
                         <div className="bg-primary image mb-5 image-container-bookscren">

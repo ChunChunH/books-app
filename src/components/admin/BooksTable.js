@@ -13,8 +13,33 @@ import ModalEditBook from './ModalEditBook';
 import swal from 'sweetalert'
 import axios from 'axios';
 import { useBooks } from '../../context/MyContext';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import { withStyles } from '@material-ui/core/styles';
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
+
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+      backgroundColor: "#3f51b5",
+      color: theme.palette.common.white,
+    },
+    body: {
+      fontSize: 14,
+    },
+  }))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+root: {
+    '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+    },
+},
+}))(TableRow);
 
 function BooksTable() {
 
@@ -28,8 +53,8 @@ function BooksTable() {
     const booksPerPage = 16
     const pagesVisited = pageNumber * booksPerPage 
 
-    const numberOfFilterBooks = books?.filter(book => book.name.toLowerCase().includes(filter) || book.id.toLowerCase().includes(filter))
-    const displayBooks = filter ? books?.filter(book => book.name.toLowerCase().includes(filter) || book.id.toLowerCase().includes(filter)).slice(pagesVisited, pagesVisited + booksPerPage) : books?.slice(pagesVisited, pagesVisited + booksPerPage)
+    const numberOfFilterBooks = books?.filter(book => book.name.toLowerCase().includes(filter?.toLowerCase()) || book.id.toLowerCase().includes(filter?.toLowerCase()))
+    const displayBooks = filter ? books?.filter(book => book.name.toLowerCase().includes(filter?.toLowerCase()) || book.id.toLowerCase().includes(filter?.toLowerCase())).slice(pagesVisited, pagesVisited + booksPerPage) : books?.slice(pagesVisited, pagesVisited + booksPerPage)
 
     const pageCount = filter ? Math.ceil(numberOfFilterBooks?.length / booksPerPage) : Math.ceil(books?.length / booksPerPage)
 
@@ -39,7 +64,7 @@ function BooksTable() {
 
     const onChangeFilter = e => {
         let filterText = e.target.value
-        setFilter(filterText.toLowerCase())
+        setFilter(filterText)
     }
 
     const handleClickOpen = () => {
@@ -104,12 +129,11 @@ function BooksTable() {
                             />
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-12 px-0 my-table">
+                <div className="row px-0 my-table">
                     {
                         books ?
                         <>
-                            <table className="table table-bordered w-100">
+                            {/* <table className="table table-bordered w-100">
                                 <thead>
                                     <tr >
                                         <th scope="col">ID</th>
@@ -142,7 +166,44 @@ function BooksTable() {
                                         })
                                     }
                                 </tbody>
-                            </table>
+                            </table> */}
+
+                            <TableContainer className="col-12 w-100 p-0 pb-3">
+                                <Table aria-label="customized table">
+                                    <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell>ID</StyledTableCell>
+                                        <StyledTableCell>Name</StyledTableCell>
+                                        <StyledTableCell>Publication Date</StyledTableCell>
+                                        <StyledTableCell>Pages</StyledTableCell>
+                                        <StyledTableCell>Actions</StyledTableCell>
+                                    </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {displayBooks.map(book => {
+
+                                            const date = new Date(book.publicationDate)
+
+                                            return (
+                                                <StyledTableRow key={book.id}>
+                                                <StyledTableCell component="th" scope="row">
+                                                    {book.id}
+                                                </StyledTableCell>
+                                                <StyledTableCell>{book.name}</StyledTableCell>
+                                                <StyledTableCell>{format(date,'dd/MM/yyyy' )}</StyledTableCell>
+                                                <StyledTableCell>{book.pages} pages</StyledTableCell>
+                                                <StyledTableCell>
+                                                    <div>
+                                                        <IconButton onClick={() => editBook(book.id, book.name, book.description, book.pages, book.publicationDate, book.excerpt, book.image)}> <EditIcon/> </IconButton>
+                                                        <IconButton onClick={() => deleteBook(book.id)}> <DeleteIcon/> </IconButton>
+                                                    </div>
+                                                </StyledTableCell>
+                                                </StyledTableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
 
                             <div className="row justify-content-center align-items-center">
                                 <div className="col-12 mt-3">
@@ -166,7 +227,6 @@ function BooksTable() {
                         </div>
                     }
                     
-                    </div>
                 </div>
             </div>
 

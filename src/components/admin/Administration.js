@@ -10,9 +10,7 @@ function Administration() {
 
     return (
         <>
-            <Header
-                headerTitle="Administration"
-            />
+            <Header/>
             <div className="d-flex justify-content-center mb-4">
                 <h4>Add Book</h4>
             </div>
