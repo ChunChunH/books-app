@@ -2,27 +2,28 @@ import React, { useContext, useEffect, useState } from 'react';
 import { createContext } from "react";
 import axios from 'axios'
 
-axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
+axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
 export const myContext = createContext();
 
 export function BooksProvider(props) {
     const [books, setBooks] = useState()
-  
+
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get('/api/v1/Books')
+            let response = await axios.get('/api/books')
             if(response){
-                setBooks(response.data)
-
+                setBooks(response.data.books)
+                console.log(response)
+                
             }else{
                 console.log("error")
             }
         }
         fetchData()
     }, [])
-
-    return <myContext.Provider value={{books}} {...props} />
+    
+    return <myContext.Provider value={{books, setBooks}} {...props} />
 }
 
 export function useBooks() {

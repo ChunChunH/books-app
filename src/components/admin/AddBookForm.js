@@ -9,41 +9,41 @@ import {
 import axios from 'axios';
 import swal from 'sweetalert'
 import { useForm, Controller } from "react-hook-form";
+import { useBooks } from '../../context/MyContext';
 
-axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
+axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
 
 function AddBookForm() {
 
+    const {books, setBooks} = useBooks()
     const { handleSubmit, control, reset} = useForm();
 
     const [shrink, setShrink] = useState(false)
 
-    const getRandomId = () => {
-        return parseInt(Math.random() * (9999 - 1) + 1);
-    }
-
     const onSubmitForm = data => {
         
-        if(data.name || data.description || data.page || data.excerpt || data.date){
+        if(data.name || data.description || data.pages || data.excerpt || data.publicationDate || data.image){
             async function fetchData() {
-                let response = await axios.post("/api/v1/Books", {
-                    "id": getRandomId(),
-                    "title": data.name,
+                let response = await axios.post("/api/books/new", {
+                    "name": data.name,
                     "description": data.description,
-                    "pageCount": data.page,
+                    "pages": data.pages,
+                    "publicationDate": new Date(data.publicationDate),
                     "excerpt": data.excerpt,
-                    "publishDate": data.date
+                    "image": data.image
                 })
+                return (setBooks([...books, response.data.book]))
             }
             fetchData()
             swal("Added", `The book "${data.name}" was successfully added!`, "success")
             reset({
                 "name": "",
                 "description": "",
-                "page": "",
+                "pages": "",
+                "publicationDate": null,
                 "excerpt": "",
-                "date": null
+                "image": "" 
             })
         }
     } 
@@ -104,7 +104,7 @@ function AddBookForm() {
                             <div className="col-lg-6 col-sm-12 form-group mb-4">
 
                                     <Controller
-                                        name="date"
+                                        name="publicationDate"
                                         control={control}
                                         defaultValue=""
                                         rules={{ required: 'Book publication date is required' }}
@@ -138,7 +138,7 @@ function AddBookForm() {
                             </div>
                             <div className="col-lg-6 col-sm-12 form-group mb-4 mt-3">
                                 <Controller
-                                    name="page"
+                                    name="pages"
                                     control={control}
                                     defaultValue=""
                                     rules={{ required: 'Book number of pages is required' }}
@@ -161,7 +161,7 @@ function AddBookForm() {
                             
                         </div>
 
-                        <div className="form-group mb-4">
+                        <div className="form-group mb-5">
                             <Controller
                                 name="excerpt"
                                 control={control}
@@ -184,6 +184,30 @@ function AddBookForm() {
                                 )}
                             />
     
+                        </div>
+
+                        <div className="form-group mb-4">
+    
+                            <Controller
+                                name="image"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Book image link is required' }}
+                                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                                    <TextField
+                                        label="Image link"
+                                        type="text"
+                                        fullWidth
+                                        value={value}
+                                        onChange={onChange}
+                                        error={!!error}
+                                        helperText={error ? error.message : null}
+                                        autoComplete= "off"
+                                        
+                                    />
+                                )}
+                            />
+
                         </div>
 
                         <div className="d-flex justify-content-end">

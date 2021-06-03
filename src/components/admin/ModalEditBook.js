@@ -13,17 +13,20 @@ import swal from 'sweetalert'
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from "@material-ui/icons/Clear";
+import { useBooks } from '../../context/MyContext';
 
 axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
 function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
 
+    const {books, setBooks} = useBooks()
     const [errors, setErrors] = useState({
-        title: false,
+        name: false,
         description: false,
         date: false,
         page: false,
-        excerpt: false
+        excerpt: false,
+        image: false
     })
 
     const handleClose = () => {
@@ -41,7 +44,7 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
     const onChangeDate = (e) => {
         setBookToEdit({
             ...bookToEdit,
-            date: new Date(e) 
+            publicationDate: new Date(e) 
         })
     }
 
@@ -49,17 +52,17 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
 
         e.preventDefault()
 
-        if(bookToEdit?.title === ""){
+        if(bookToEdit?.name === ""){
             setErrors({
                 ...errors,
-                title: true
+                name: true
             })
         }else if(bookToEdit?.description === ""){
             setErrors({
                 ...errors,
                 description: true
             })
-        }else if(bookToEdit?.page === ""){
+        }else if(bookToEdit?.pages === ""){
             setErrors({
                 ...errors,
                 page: true
@@ -74,30 +77,50 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                 ...errors,
                 date: true
             })
+        }else if(bookToEdit?.image === null){
+            setErrors({
+                ...errors,
+                image: true
+            })
         }else {
-            async function fetchData() {
-                let response = await axios.put(`/api/v1/Books/${bookToEdit && bookToEdit.id}`, {
-                    "id": bookToEdit?.id,
-                    "title": bookToEdit?.title,
-                    "description": bookToEdit?.description,
-                    "pageCount": bookToEdit?.page,
-                    "excerpt": bookToEdit?.excerpt,
-                    "publishDate": bookToEdit?.date
+            async function editBook() {
+                let response = await axios.put(`/api/books/${bookToEdit && bookToEdit.id}`, {
+                    "id": bookToEdit.id,
+                    "name": bookToEdit.name,
+                    "description": bookToEdit.description,
+                    "pages": bookToEdit.pages,
+                    "publicationDate": bookToEdit.publicationDate,
+                    "excerpt": bookToEdit.excerpt,
+                    "image": bookToEdit.image
                 })
-                return console.log(response.data)
+                const book = response.data.book
+                let newBooks
+                if(books && books.length){
+                    newBooks = books.map((singleBook, index) => {
+                        if(singleBook.id === book.id){
+                            return books[index] = book
+                        } else {
+                            return books[index]
+                        }
+                    })
+                }
+
+                return setBooks(newBooks)
             }
-            fetchData()
+            editBook()
             handleClose()
             swal("Edited", "Book edited successfully!", "success")
             setErrors({
-                title: false,
+                name: false,
                 description: false,
                 page: false,
                 excerpt: false,
-                date: false
+                date: false,
+                image: false,
             })
+
+            }
         }
-    }
     
     return (
         <>
@@ -123,11 +146,11 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                         type="text"
                         fullWidth
                         className="mb-5"
-                        value={bookToEdit && bookToEdit.title}
-                        name="title"
+                        value={bookToEdit && bookToEdit.name}
+                        name="name"
                         onChange={onChangeInputEdit}
-                        error={errors.title}
-                        helperText={errors.title ? "Book name is required" : null}
+                        error={errors.name}
+                        helperText={errors.name ? "Book name is required" : null}
                         autoComplete= "off" 
                     />
                     
@@ -153,14 +176,14 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                             id="date-picker-dialog"
                             label="Publication date"
                             format="dd/MM/yyyy"
-                            value={bookToEdit && bookToEdit.date}
+                            value={bookToEdit && bookToEdit.publicationDate}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
                             }}
                             fullWidth
                             className="mb-5"
                             onChange={onChangeDate}
-                            name="date"
+                            name="publicationDate"
                             error={errors.date}
                             helperText={errors.date ? "Book publication date is required" : null}
                             autoComplete= "off" 
@@ -174,8 +197,8 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                         fullWidth
                         InputProps={{ inputProps: { min: 1, max: 999999 } }}
                         className="mb-5"
-                        value={bookToEdit && bookToEdit.page}
-                        name="page"
+                        value={bookToEdit && bookToEdit.pages}
+                        name="pages"
                         onChange={onChangeInputEdit}
                         error={errors.page}
                         helperText={errors.page ? "Book number of pages is required" : null}
@@ -195,6 +218,19 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                         error={errors.excerpt}
                         helperText={errors.excerpt ? "Book excerpt is required" : null}
                         autoComplete= "off" 
+                    />
+
+                    <TextField
+                        label="Image link"
+                        type="text"
+                        fullWidth
+                        value={bookToEdit && bookToEdit.image}
+                        onChange={onChangeInputEdit}
+                        error={errors.image}
+                        helperText={errors.image ? "Book image link is required" : null}
+                        autoComplete= "off"
+                        className="mb-3"
+                        name="image"
                     />
                 </DialogContent>
                 <DialogActions>

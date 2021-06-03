@@ -21,14 +21,15 @@ function Books() {
     const booksPerPage = 16
     const pagesVisited = pageNumber * booksPerPage 
 
-    const numberOfFilterBooks = books?.filter(book => book.title.includes(filter) || book.description.includes(filter))
-    const displayBooks = filter ? books?.filter(book => book.title.includes(filter) || book.description.includes(filter)).slice(pagesVisited, pagesVisited + booksPerPage) : books?.slice(pagesVisited, pagesVisited + booksPerPage)
+    const numberOfFilterBooks = books?.filter(book => book.name.toLowerCase().includes(filter) || book.description.toLowerCase().includes(filter))
+    const displayBooks = filter ? books?.filter(book => book.name.toLowerCase().includes(filter) || book.description.toLowerCase().includes(filter)).slice(pagesVisited, pagesVisited + booksPerPage) : books?.slice(pagesVisited, pagesVisited + booksPerPage)
         
 
     const pageCount = filter ? Math.ceil(numberOfFilterBooks?.length / booksPerPage) : Math.ceil(books?.length / booksPerPage)
 
     const onChangeFilter = e => {
-        setFilter(e.target.value)
+        let filterText = e.target.value
+        setFilter(filterText.toLowerCase())
     }
 
     const changePage = ({selected}) => {
@@ -83,11 +84,13 @@ function Books() {
                                 
                                 <div className="col-lg-3 col-md-4 col-sm-12 mb-5">
                                     <div className="card w-100">
-                                        <img className="card-img-left" src="Landscape.jpg" alt="Card image cap"/>
-                                        <div className="card-body">
-                                            <h5 className="card-title">{book.title}</h5>
+                                        <div className="image-container">
+                                            <img className="card-img-left" width="100%" src={book.image} alt={book.name}/>
+                                        </div>                                        
+                                        <div className="card-body cardBodyContainer">
+                                            <h5 className="card-title name">{book.name}</h5>
                                             <p className="card-text description">{book.description}</p>
-                                            <p className="text-muted">{book.pageCount} pages</p>
+                                            <p className="text-muted">{book.pages} pages</p>
                                             <Link to={paramsLink}><button className="btn btn-primary mb-2">See more</button></Link>
                                         </div>
                                     </div> 

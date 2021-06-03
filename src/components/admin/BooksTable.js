@@ -12,11 +12,13 @@ import {format} from "date-fns"
 import ModalEditBook from './ModalEditBook';
 import swal from 'sweetalert'
 import axios from 'axios';
+import { useBooks } from '../../context/MyContext';
 
-axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
+axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
-function BooksTable({books}) {
+function BooksTable() {
 
+    const {books, setBooks} = useBooks()
     const [pageNumber, setPageNumber] = useState(0)
     const [filter, setFilter] = useState()
     const [shrink, setShrink] = useState(false)
@@ -26,8 +28,8 @@ function BooksTable({books}) {
     const booksPerPage = 16
     const pagesVisited = pageNumber * booksPerPage 
 
-    const numberOfFilterBooks = books?.filter(book => book.title.includes(filter) || book.id === filter)
-    const displayBooks = filter ? books?.filter(book => book.title.includes(filter) || book.id === filter).slice(pagesVisited, pagesVisited + booksPerPage) : books?.slice(pagesVisited, pagesVisited + booksPerPage)
+    const numberOfFilterBooks = books?.filter(book => book.name.toLowerCase().includes(filter) || book.id.toLowerCase().includes(filter))
+    const displayBooks = filter ? books?.filter(book => book.name.toLowerCase().includes(filter) || book.id.toLowerCase().includes(filter)).slice(pagesVisited, pagesVisited + booksPerPage) : books?.slice(pagesVisited, pagesVisited + booksPerPage)
 
     const pageCount = filter ? Math.ceil(numberOfFilterBooks?.length / booksPerPage) : Math.ceil(books?.length / booksPerPage)
 
@@ -36,7 +38,8 @@ function BooksTable({books}) {
     }
 
     const onChangeFilter = e => {
-        setFilter(e.target.value)
+        let filterText = e.target.value
+        setFilter(filterText.toLowerCase())
     }
 
     const handleClickOpen = () => {
@@ -45,10 +48,12 @@ function BooksTable({books}) {
 
     const deleteBook = (id) => {
         async function fetchData() {
-            let response = await axios.delete(`/api/v1/Books/${id}`)
+            let response = await axios.delete(`/api/books/${id}`)
+            let newBooks = books.filter(book => book.id != id)
             if(response){
                 if(response.status === 200){
                     swal("Removed", `The book with the ID "${id}" was successfully removed!`, "success")
+                    return (setBooks(newBooks))
                 }else {
                     swal("Error", "The book could not be erased", "error")
                 }
@@ -59,15 +64,16 @@ function BooksTable({books}) {
         fetchData()
     }
 
-    const editBook = (id, title, description, date, page, excerpt) => {
+    const editBook = (id, name, description, pages, publicationDate, excerpt, image) => {
         handleClickOpen();
         setBookToEdit({
             id: id,
-            title,
+            name,
             description,
-            date,
-            page,
-            excerpt
+            pages,
+            publicationDate,
+            excerpt,
+            image
         })        
     }
 
@@ -117,17 +123,17 @@ function BooksTable({books}) {
                                     {
                                         displayBooks.map(book => {
 
-                                            const date = new Date(book.publishDate)
+                                            const date = new Date(book.publicationDate)
 
                                             return (
                                                 <tr>
                                                     <th scope="row">{book.id}</th>
-                                                    <td>{book.title}</td>
+                                                    <td>{book.name}</td>
                                                     <td>{format(date,'dd/MM/yyyy' )}</td>
-                                                    <td>{book.pageCount} pages</td>
+                                                    <td>{book.pages} pages</td>
                                                     <td>
                                                         <div>
-                                                            <IconButton onClick={() => editBook(book.id, book.title, book.description, book.publishDate, book.pageCount, book.excerpt)}> <EditIcon/> </IconButton>
+                                                            <IconButton onClick={() => editBook(book.id, book.name, book.description, book.pages, book.publicationDate, book.excerpt, book.image)}> <EditIcon/> </IconButton>
                                                             <IconButton onClick={() => deleteBook(book.id)}> <DeleteIcon/> </IconButton>
                                                         </div>
                                                     </td>

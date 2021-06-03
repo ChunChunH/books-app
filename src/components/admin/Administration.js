@@ -7,7 +7,6 @@ import { useBooks } from '../../context/MyContext';
 
 function Administration() {
 
-    const {books} = useBooks()
 
     return (
         <>
@@ -18,9 +17,7 @@ function Administration() {
                 <h4>Add Book</h4>
             </div>
             <AddBookForm/>
-            <BooksTable
-                books= {books}
-            />
+            <BooksTable/>
             <Footer
                 linkText= "Home"
                 path="/"

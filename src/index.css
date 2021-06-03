@@ -2,13 +2,8 @@ body {
   background-color: #eaeaea;
 }
 
-.image {
-  height: 500px;
-}
-
 .footer {
   height: 60px;
-  margin-bottom: 0px;
 }
 
 .my-table {
@@ -20,6 +15,7 @@ body {
   overflow: hidden;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  min-height: 96px;
 }
 
 .paginationBttns {
@@ -66,7 +62,47 @@ body {
   .paginationBttns a {
     font-size: 13px;
     margin: 0px;
-    
+    max-height: 300px;
   }
+
+}
+
+
+.image-container {
+  max-height: 390px;
+  overflow: hidden;
+}
+
+@media (max-width: 1399px) {
+  .image-container {
+    max-height: 280px;
+  }
+}
+
+@media (max-width: 767px) {
+  .image-container {
+    max-height: 550px;
+  }
+}
+
+.name {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.cardBodyContainer {
+  min-height: 262px;
+
+}
+
+.image-container-bookscreen {
+  height: 395px;
+  overflow: hidden;
+}
+
+.bookscreen-excerpt {
+  min-height: 30vh;
 }
 
