@@ -80,7 +80,7 @@ function Books() {
 
                             return (
                                 
-                                <div className="col-lg-3 col-md-4 col-sm-12 mb-5">
+                                <div className="col-lg-3 col-md-4 col-sm-12 mb-5" key={book.id}>
                                     <div className="card w-100">
                                         <div className="image-container">
                                             <img className="card-img-left image" width="100%" src={book.image} alt={book.name}/>

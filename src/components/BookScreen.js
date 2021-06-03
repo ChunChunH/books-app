@@ -22,13 +22,13 @@ function BookScreen(props) {
             let response = await axios.get(`/api/books/${id}`)
             if(response){
                 setBook(response.data.book)
-                console.log(response.data.book)
             }else{
                 console.log("error")
             }
         }
         fetchData()
-        console.log(props)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

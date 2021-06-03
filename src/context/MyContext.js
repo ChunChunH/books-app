@@ -14,7 +14,6 @@ export function BooksProvider(props) {
             let response = await axios.get('/api/books')
             if(response){
                 setBooks(response.data.books)
-                console.log(response)
                 
             }else{
                 console.log("error")

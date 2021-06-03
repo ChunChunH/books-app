@@ -74,7 +74,7 @@ function BooksTable() {
     const deleteBook = (id) => {
         async function fetchData() {
             let response = await axios.delete(`/api/books/${id}`)
-            let newBooks = books.filter(book => book.id != id)
+            let newBooks = books.filter(book => book.id !== id)
             if(response){
                 if(response.status === 200){
                     swal("Removed", `The book with the ID "${id}" was successfully removed!`, "success")
@@ -133,41 +133,6 @@ function BooksTable() {
                     {
                         books ?
                         <>
-                            {/* <table className="table table-bordered w-100">
-                                <thead>
-                                    <tr >
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Publication Date</th>
-                                        <th scope="col">Pages</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        displayBooks.map(book => {
-
-                                            const date = new Date(book.publicationDate)
-
-                                            return (
-                                                <tr>
-                                                    <th scope="row">{book.id}</th>
-                                                    <td>{book.name}</td>
-                                                    <td>{format(date,'dd/MM/yyyy' )}</td>
-                                                    <td>{book.pages} pages</td>
-                                                    <td>
-                                                        <div>
-                                                            <IconButton onClick={() => editBook(book.id, book.name, book.description, book.pages, book.publicationDate, book.excerpt, book.image)}> <EditIcon/> </IconButton>
-                                                            <IconButton onClick={() => deleteBook(book.id)}> <DeleteIcon/> </IconButton>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                </tbody>
-                            </table> */}
-
                             <TableContainer className="col-12 w-100 p-0 pb-3">
                                 <Table aria-label="customized table">
                                     <TableHead>
@@ -180,7 +145,7 @@ function BooksTable() {
                                     </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {displayBooks.map(book => {
+                                        {displayBooks.map((book) => {
 
                                             const date = new Date(book.publicationDate)
 

@@ -3,7 +3,6 @@ import AddBookForm from './AddBookForm'
 import BooksTable from './BooksTable'
 import Footer from '../Footer'
 import Header from '../Header'
-import { useBooks } from '../../context/MyContext';
 
 function Administration() {
 

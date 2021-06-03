@@ -126,8 +126,7 @@ function AddBookForm() {
                                                     value={value}
                                                     onChange={onChange}
                                                     error={!!error}
-                                                    helperText={error ? error.message : null}
-                                                    autoComplete= "off"    
+                                                    helperText={error ? error.message : null}    
                                                     InputLabelProps={{shrink: (value || shrink) ? true : false}}
                                                     onFocus={() => setShrink(true)}
                                                     onBlur={() => value ? setShrink(true) : setShrink(false)}
