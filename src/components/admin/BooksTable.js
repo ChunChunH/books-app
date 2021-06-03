@@ -106,7 +106,7 @@ function BooksTable() {
         <>
             <div className="container mt-5 ">
                 <div className="row">
-                    <div className="col-lg-3 col-md-4 col-sm-12">
+                    <div className="col-lg-3 col-md-4 col-sm-12 ps-0">
                             <TextField
                                 value={filter}
                                 label="Name or ID"
@@ -117,12 +117,15 @@ function BooksTable() {
                                 onBlur={() => filter ? setShrink(true) : setShrink(false)}
                                 InputProps={{
                                     endAdornment: (
-                                    <IconButton onClick={() => {
-                                        setFilter("")
-                                        setShrink(false)
-                                        }}>
-                                        <ClearIcon />
-                                    </IconButton>
+                                        <IconButton
+                                            onClick={() => {
+                                                setFilter("")
+                                                setShrink(false)
+                                            }}
+                                            className="p-0"
+                                        >
+                                            <ClearIcon />
+                                        </IconButton>
                                     )
                                 }}
                                 InputLabelProps={{ shrink: shrink }}

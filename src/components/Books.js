@@ -55,12 +55,15 @@ function Books() {
                             onBlur={() => filter ? setShrink(true) : setShrink(false)}
                             InputProps={{
                                 endAdornment: (
-                                  <IconButton onClick={() => {
-                                      setFilter("")
-                                      setShrink(false)
-                                    }}>
-                                    <ClearIcon />
-                                  </IconButton>
+                                    <IconButton
+                                        onClick={() => {
+                                            setFilter("")
+                                            setShrink(false)
+                                        }}
+                                        className="p-0"
+                                    >
+                                        <ClearIcon />
+                                    </IconButton>
                                 )
                             }}
                             InputLabelProps={{ shrink: shrink }}
