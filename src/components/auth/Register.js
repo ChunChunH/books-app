@@ -12,12 +12,15 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import axios from 'axios';
 import swal from 'sweetalert'
+import { useHistory } from "react-router-dom";
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
 export default function Register() {
 
     const { handleSubmit, control, reset} = useForm();
+
+    const history = useHistory()
 
     const [showPassword, setShowPassword] = useState(false)
 
@@ -48,7 +51,10 @@ export default function Register() {
                             "password": "",
                             "email": "",
                             "password2": ""
-                        })
+                        }),
+                        setTimeout(() => {
+                            history.push("/login")
+                        }, 2000)
                     )
                 }
  

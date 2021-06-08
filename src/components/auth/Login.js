@@ -12,10 +12,16 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import axios from 'axios';
 import swal from 'sweetalert'
+import { useHistory } from "react-router-dom";
+import { useBooks } from '../../context/MyContext';
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
 export default function Login() {
+
+    const history = useHistory()
+
+    const {setUser} = useBooks()
 
     const { handleSubmit, control, reset} = useForm();
 
@@ -38,13 +44,19 @@ export default function Login() {
                     "email": data.email
                 })
                 return (
-                    localStorage.setItem('token', JSON.stringify(response.data.user.token)),
-                    localStorage.setItem( 'token-init-date', new Date().getTime()),
+                    setUser(response.data.user),
+    
+                    localStorage.setItem('token', response.data.user.token),
+                    localStorage.setItem('token-init-date', new Date().getTime()),
+
                     swal("Logged", `The user "${response.data.user.name}" was successfully logged!`, "success"),
                     reset({
                         "email": "",
                         "password": "",
-                    })
+                    }),
+                    setTimeout(() => {
+                        history.push("/")
+                    }, 2000)
                 )
             } catch (error) {
                 return swal("Error", error.response.data.msg, "error")

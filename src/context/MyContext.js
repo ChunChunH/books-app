@@ -8,6 +8,7 @@ export const myContext = createContext();
 
 export function BooksProvider(props) {
     const [books, setBooks] = useState()
+    const [user, setUser] = useState()
 
     useEffect(() => {
         async function fetchData() {
@@ -22,7 +23,7 @@ export function BooksProvider(props) {
         fetchData()
     }, [])
     
-    return <myContext.Provider value={{books, setBooks}} {...props} />
+    return <myContext.Provider value={{books, setBooks, user, setUser}} {...props} />
 }
 
 export function useBooks() {

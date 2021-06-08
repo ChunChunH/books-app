@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 import Administration from './components/admin/Administration';
 import Login from './components/auth/Login';
@@ -6,17 +6,25 @@ import Register from './components/auth/Register';
 import Books from './components/Books';
 import BookScreen from './components/BookScreen';
 import { BooksProvider } from './context/MyContext';
+import { checkToken } from './helpers/checkToken';
+import { PrivateRoute } from './PrivateRoute';
+import { AdminRoute } from './AdminRoute';
 
 function App() {
+
+  useEffect(() => {
+      checkToken()
+  }, [])
+
   return (
     <BooksProvider>
       <Router>
         <Switch>
           <Route exact path="/login" component={Login}/>
           <Route exact path="/register" component={Register}/>
-          <Route exact path="/" component={Books} />
-          <Route path="/book/:id" component={BookScreen}/>
-          <Route exact path="/admin" component={Administration}/>
+          <PrivateRoute component={Books} path="/" exact />
+          <PrivateRoute path="/book/:id" component={BookScreen}/>
+          <AdminRoute exact path="/admin" component={Administration}/>
         </Switch>
       </Router>
     </BooksProvider>
