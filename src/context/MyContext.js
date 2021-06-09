@@ -12,7 +12,11 @@ export function BooksProvider(props) {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get('/api/books')
+            let response = await axios.get('/api/books', {
+                headers: {
+                    'x-token': user?.token
+                }
+            })
             if(response){
                 setBooks(response.data.books)
                 
@@ -20,7 +24,10 @@ export function BooksProvider(props) {
                 console.log("error")
             }
         }
+         
         fetchData()
+        
+        
     }, [])
     
     return <myContext.Provider value={{books, setBooks, user, setUser}} {...props} />

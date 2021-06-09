@@ -45,7 +45,7 @@ export default function Login() {
                 })
                 return (
                     setUser(response.data.user),
-    
+
                     localStorage.setItem('token', response.data.user.token),
                     localStorage.setItem('token-init-date', new Date().getTime()),
 

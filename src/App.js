@@ -6,14 +6,15 @@ import Register from './components/auth/Register';
 import Books from './components/Books';
 import BookScreen from './components/BookScreen';
 import { BooksProvider } from './context/MyContext';
-import { checkToken } from './helpers/checkToken';
 import { PrivateRoute } from './PrivateRoute';
 import { AdminRoute } from './AdminRoute';
+import { checkToken } from './helpers/checkToken';
+
 
 function App() {
 
   useEffect(() => {
-      checkToken()
+    checkToken()
   }, [])
 
   return (
