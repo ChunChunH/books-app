@@ -8,18 +8,20 @@ import 'date-fns';
 import {format} from "date-fns"
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import { useBooks } from '../context/MyContext';
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
+// axios.defaults.headers.common['x-token'] = token
 
 function BookScreen(props) {
-
+    
     const id = props.location.id || props.match.params.id
     const [book, setBook] = useState()
-
+    
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get(`/api/books/${id}`)
+            const token = localStorage.getItem('token') 
+            let response = await axios.get(`/api/books/${id}`, {headers: {'x-token': token}})
             if(response){
                 setBook(response.data.book)
             }else{

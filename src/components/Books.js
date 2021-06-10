@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Header from './Header'
 import Footer from './Footer';
 import ReactPaginate from "react-paginate";
@@ -9,14 +9,17 @@ import { useBooks } from '../context/MyContext';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from "@material-ui/icons/Clear";
 import { IconButton } from "@material-ui/core";
+import axios from 'axios'
 
+axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
 function Books() {
 
-    const {books} = useBooks()
+    const {setBooks, books, user} = useBooks()
     const [pageNumber, setPageNumber] = useState(0)
     const [filter, setFilter] = useState()
     const [shrink, setShrink] = useState(false)
+    const token = localStorage.getItem('token')
 
     const booksPerPage = 16
     const pagesVisited = pageNumber * booksPerPage 
@@ -35,6 +38,25 @@ function Books() {
     const changePage = ({selected}) => {
         setPageNumber(selected)
     }
+
+    useEffect(() => {
+        async function fetchData() {
+
+            if(user){
+                let response = await axios.get('/api/books', {
+                    headers: {
+                        'x-token': token
+                    }
+                })
+                if(response){
+                    setBooks(response.data.books)
+                }else{
+                    console.log("error")
+                }
+            }
+        }
+        fetchData()
+    }, [user, token])
 
     return (
         <>

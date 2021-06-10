@@ -49,6 +49,7 @@ function BooksTable() {
     const [shrink, setShrink] = useState(false)
     const [open, setOpen] = useState(false);
     const [bookToEdit, setBookToEdit] = useState()
+    const {user} = useBooks()
 
     const booksPerPage = 16
     const pagesVisited = pageNumber * booksPerPage 
@@ -73,17 +74,29 @@ function BooksTable() {
 
     const deleteBook = (id) => {
         async function fetchData() {
-            let response = await axios.delete(`/api/books/${id}`)
-            let newBooks = books.filter(book => book.id !== id)
-            if(response){
-                if(response.status === 200){
-                    swal("Removed", `The book with the ID "${id}" was successfully removed!`, "success")
-                    return (setBooks(newBooks))
-                }else {
-                    swal("Error", "The book could not be erased", "error")
+
+            const token = localStorage.getItem('token') 
+            try {
+                if(user) {
+                    let response = await axios.delete(`/api/books/${id}`, {
+                        headers: {
+                            'x-token': token && token
+                        }
+                    })
+                    let newBooks = books.filter(book => book.id !== id)
+                    if(response){
+                        if(response.status === 200){
+                            swal("Removed", `The book with the ID "${id}" was successfully removed!`, "success")
+                            return (setBooks(newBooks))
+                        }else {
+                            swal("Error", "The book could not be erased", "error")
+                        }
+                    }else{
+                        console.log("error")
+                    }
                 }
-            }else{
-                console.log("error")
+            } catch (error) {
+                return swal("Warning", "Action not allowed", "warning")
             }
         }
         fetchData()

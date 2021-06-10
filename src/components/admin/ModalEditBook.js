@@ -20,7 +20,7 @@ axios.defaults.baseURL = "https://fakerestapi.azurewebsites.net"
 
 function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
 
-    const {books, setBooks} = useBooks()
+    const {books, setBooks, user} = useBooks()
     const [errors, setErrors] = useState({
         name: false,
         description: false,
@@ -84,43 +84,56 @@ function ModalEditBook({open, setOpen, bookToEdit, setBookToEdit}) {
                 image: true
             })
         }else {
-            async function editBook() {
-                let response = await axios.put(`/api/books/${bookToEdit && bookToEdit.id}`, {
-                    "id": bookToEdit.id,
-                    "name": bookToEdit.name,
-                    "description": bookToEdit.description,
-                    "pages": bookToEdit.pages,
-                    "publicationDate": bookToEdit.publicationDate,
-                    "excerpt": bookToEdit.excerpt,
-                    "image": bookToEdit.image
-                })
-                const book = response.data.book
-                let newBooks
-                if(books && books.length){
-                    newBooks = books.map((singleBook, index) => {
-                        if(singleBook.id === book.id){
-                            return books[index] = book
-                        } else {
-                            return books[index]
+            if(user){ 
+                async function editBook() {
+                    try {   
+                        const token = localStorage.getItem('token') 
+    
+                        const options = {
+                            headers: {'x-token': token && token}
+                        };
+    
+                        let response = await axios.put(`/api/books/${bookToEdit && bookToEdit.id}`, {
+                            "id": bookToEdit.id,
+                            "name": bookToEdit.name,
+                            "description": bookToEdit.description,
+                            "pages": bookToEdit.pages,
+                            "publicationDate": bookToEdit.publicationDate,
+                            "excerpt": bookToEdit.excerpt,
+                            "image": bookToEdit.image
+                        }, options)
+                        
+                        const book = response.data.book
+                        let newBooks
+                        if(books && books.length){
+                            newBooks = books.map((singleBook, index) => {
+                                if(singleBook.id === book.id){
+                                    return books[index] = book
+                                } else {
+                                    return books[index]
+                                }
+                            })
                         }
-                    })
+        
+                        swal("Edited", "Book edited successfully!", "success")
+                        return setBooks(newBooks)
+                    } catch (error) {
+                        return swal("Warning", "Action not allowed", "warning")      
+                    }
                 }
-
-                return setBooks(newBooks)
+                editBook()
+                handleClose()
+                setErrors({
+                    name: false,
+                    description: false,
+                    page: false,
+                    excerpt: false,
+                    date: false,
+                    image: false,
+                })
             }
-            editBook()
-            handleClose()
-            swal("Edited", "Book edited successfully!", "success")
-            setErrors({
-                name: false,
-                description: false,
-                page: false,
-                excerpt: false,
-                date: false,
-                image: false,
-            })
+        }
 
-            }
         }
     
     return (

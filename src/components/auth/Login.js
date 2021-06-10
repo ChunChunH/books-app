@@ -14,6 +14,7 @@ import axios from 'axios';
 import swal from 'sweetalert'
 import { useHistory } from "react-router-dom";
 import { useBooks } from '../../context/MyContext';
+import useToken from '../../helpers/checkToken';
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
@@ -22,6 +23,8 @@ export default function Login() {
     const history = useHistory()
 
     const {setUser} = useBooks()
+
+    const { checkToken } = useToken()
 
     const { handleSubmit, control, reset} = useForm();
 
@@ -41,15 +44,18 @@ export default function Login() {
             try {
                 let response = await axios.post("/api/auth/", {
                     "password": data.password,
-                    "email": data.email
+                    "email": data.email         
                 })
+                const {id, name, userType, token} = response.data.user
                 return (
-                    setUser(response.data.user),
+                    setUser({id, name, userType}),
+                    
+                    checkToken(setUser),
 
-                    localStorage.setItem('token', response.data.user.token),
+                    localStorage.setItem('token', token),
                     localStorage.setItem('token-init-date', new Date().getTime()),
 
-                    swal("Logged", `The user "${response.data.user.name}" was successfully logged!`, "success"),
+                    swal("Logged", `The user "${name}" was successfully logged!`, "success"),
                     reset({
                         "email": "",
                         "password": "",

@@ -14,30 +14,35 @@ import "../../index.css"
 
 axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
 
-
 function AddBookForm() {
-
+    
     const {books, setBooks} = useBooks()
     const { handleSubmit, control, reset} = useForm();
-
+    
     const [shrink, setShrink] = useState(false)
-
+    
     const onSubmitForm = data => {
-        
         if(data.name || data.description || data.pages || data.excerpt || data.publicationDate || data.image){
             async function fetchData() {
-                let response = await axios.post("/api/books/new", {
-                    "name": data.name,
-                    "description": data.description,
-                    "pages": data.pages,
-                    "publicationDate": new Date(data.publicationDate),
-                    "excerpt": data.excerpt,
-                    "image": data.image
-                })
-                return (setBooks([...books, response.data.book]))
+                try {
+                    const token = localStorage.getItem('token') 
+                    let response = await axios.post("/api/books/new", {
+                        "name": data.name,
+                        "description": data.description,
+                        "pages": data.pages,
+                        "publicationDate": new Date(data.publicationDate),
+                        "excerpt": data.excerpt,
+                        "image": data.image
+                    }, {headers: {
+                        'x-token': token
+                    }})
+                    swal("Added", `The book "${data.name}" was successfully added!`, "success")
+                    return (setBooks([...books, response.data.book]))
+                } catch (error) {
+                    return swal("Warning", "Action not allowed", "warning")
+                }
             }
             fetchData()
-            swal("Added", `The book "${data.name}" was successfully added!`, "success")
             reset({
                 "name": "",
                 "description": "",

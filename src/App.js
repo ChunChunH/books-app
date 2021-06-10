@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 import Administration from './components/admin/Administration';
 import Login from './components/auth/Login';
@@ -8,14 +8,8 @@ import BookScreen from './components/BookScreen';
 import { BooksProvider } from './context/MyContext';
 import { PrivateRoute } from './PrivateRoute';
 import { AdminRoute } from './AdminRoute';
-import { checkToken } from './helpers/checkToken';
-
 
 function App() {
-
-  useEffect(() => {
-    checkToken()
-  }, [])
 
   return (
     <BooksProvider>

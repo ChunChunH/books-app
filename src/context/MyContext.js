@@ -1,34 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { createContext } from "react";
-import axios from 'axios'
-
-axios.defaults.baseURL = "https://mern-books-server.herokuapp.com"
+import jwt_decode from 'jwt-decode'
 
 export const myContext = createContext();
 
 export function BooksProvider(props) {
     const [books, setBooks] = useState()
     const [user, setUser] = useState()
-
+    const token = localStorage.getItem('token')
+    
     useEffect(() => {
-        async function fetchData() {
-            let response = await axios.get('/api/books', {
-                headers: {
-                    'x-token': user?.token
-                }
-            })
-            if(response){
-                setBooks(response.data.books)
-                
-            }else{
-                console.log("error")
-            }
+        if(token){
+            const {id, name, userType} = jwt_decode(token);
+            setUser({id, name, userType})
         }
-         
-        fetchData()
-        
-        
-    }, [])
+        console.log("SETEANDO TOKEN")
+    }, [token])
     
     return <myContext.Provider value={{books, setBooks, user, setUser}} {...props} />
 }
